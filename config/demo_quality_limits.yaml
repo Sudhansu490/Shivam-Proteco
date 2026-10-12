@@ -1,0 +1,10 @@
+# Fictional demo limits for software testing ONLY.
+# Do NOT use as real factory specifications or Shivam Proteco company data.
+aluminium_powder:
+  purity_min_pct: 99.0
+  moisture_max_pct: 0.10
+  particle_size_min_um: 10
+  particle_size_max_um: 50
+
+plastic_component:
+  defect_count_max: 0

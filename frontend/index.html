@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manufacturing Quality Intelligence (Demo)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Manufacturing Quality Intelligence <span class="tag">Agentic AI · Demo</span></h1>
+      <p class="subtitle">Aluminium powder &amp; plastic component batch inspection</p>
+    </div>
+    <div id="health" class="health" title="Backend status">checking…</div>
+  </header>
+
+  <div class="disclaimer">
+    <strong>Synthetic demo data only.</strong>
+    Batches in <code>data/quality_batches.csv</code> and limits in
+    <code>config/demo_quality_limits.yaml</code> are fictional and
+    <strong>NOT</strong> real factory specifications or company data.
+  </div>
+
+  <main>
+    <section class="cards" id="summary-cards" aria-label="Summary">
+      <div class="card"><span class="label">Total batches</span><span class="value" id="c-total">–</span></div>
+      <div class="card pass"><span class="label">PASS (calculated)</span><span class="value" id="c-pass">–</span></div>
+      <div class="card fail"><span class="label">FAIL (calculated)</span><span class="value" id="c-fail">–</span></div>
+      <div class="card review"><span class="label">REVIEW (calculated)</span><span class="value" id="c-review">–</span></div>
+      <div class="card warn"><span class="label">Discrepancies</span><span class="value" id="c-disc">–</span></div>
+    </section>
+
+    <section class="toolbar">
+      <label>Product
+        <select id="f-product">
+          <option value="all">all</option>
+          <option value="aluminium_powder">aluminium_powder</option>
+          <option value="plastic_component">plastic_component</option>
+        </select>
+      </label>
+      <label>Status
+        <select id="f-status">
+          <option value="all">all</option>
+          <option value="PASS">PASS</option>
+          <option value="FAIL">FAIL</option>
+          <option value="REVIEW">REVIEW</option>
+        </select>
+      </label>
+      <label class="grow">Search
+        <input id="f-search" type="search" placeholder="batch id, e.g. B002" />
+      </label>
+      <button id="btn-ingest" type="button" title="Ingest SOPs into ChromaDB + SQLite">Ingest SOPs</button>
+      <span id="ingest-msg" class="muted"></span>
+    </section>
+
+    <div class="layout">
+      <section class="list" aria-label="Batches">
+        <h2>Batches <span id="list-count" class="muted"></span></h2>
+        <div id="batch-list" class="batch-list"></div>
+      </section>
+
+      <section class="detail" aria-label="Batch detail">
+        <h2>Batch detail</h2>
+        <div id="detail-empty" class="muted">Select a batch to see measurements, failed checks and recorded-vs-calculated status.</div>
+        <div id="detail" hidden>
+          <div class="detail-head">
+            <strong id="d-id"></strong>
+            <span id="d-badges" class="badges"></span>
+          </div>
+          <dl class="kv" id="d-measurements"></dl>
+          <div id="d-checks"></div>
+          <div class="btn-row">
+            <button id="btn-investigate" type="button">Investigate</button>
+            <button id="btn-history" type="button">History</button>
+          </div>
+          <div id="workflow"></div>
+          <h3>Human review (mandatory for release)</h3>
+          <form id="review-form" class="review-form">
+            <label>Decision
+              <select id="r-decision">
+                <option value="PASS">PASS</option>
+                <option value="FAIL">FAIL</option>
+                <option value="REVIEW" selected>REVIEW</option>
+              </select>
+            </label>
+            <label>Reviewer <input id="r-reviewer" value="human_reviewer" /></label>
+            <label class="grow">Comments <input id="r-comments" placeholder="reason for disposition" /></label>
+            <button type="submit">Submit review</button>
+          </form>
+          <div id="review-msg" class="muted"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    No batch is auto-released — every disposition requires authorized human review.
+    LLM never overrides deterministic numerical validation.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
